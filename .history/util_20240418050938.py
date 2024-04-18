@@ -153,11 +153,3 @@ def pairwise(iterable):
     next(b, None)
     # パターン1: 最後の要素のペアは生成されない
     return zip(a, b)
-
-
-if __name__ == "__main__":
-    # テストケース
-    test_values = ["int", "float", "03", "2345", "-123.456", "0.56", "dsd", "100L", "5.2f"]
-    results = {val: is_numeric(val) for val in test_values}
-
-    print(results)

@@ -17,22 +17,21 @@ def main(app):
         pattern = r'([^_]+)_(.*)_画面設計書\.xlsx'
         for file_name in os.listdir(config.DOCUMENT_DIRECTORY):
             if not file_name.startswith('~$') and re.match(pattern, file_name):
-                matched = re.match(pattern, file_name)
-                if matched:
-                    # パターンにマッチした場合
-                    site_id = matched.group(1)
-                    interface_name = matched.group(2)
-                    config.template_json["HeaderInfo"]["Convertors"][0]["SiteTitle"] = interface_name
-                    interfaces.append({
-                        "site_id": site_id,
-                        "interface_name": interface_name,
-                        "file_name": file_name
-                    })
+            matched = re.match(pattern, file_name)
+            if matched:
+                # パターンにマッチした場合
+                site_id = matched.group(1)
+                interface_name = matched.group(2)
+                config.template_json["HeaderInfo"]["Convertors"][0]["SiteTitle"] = interface_name
+                interfaces.append({
+                    "site_id": site_id,
+                    "interface_name": interface_name,
+                    "file_name": file_name
+                })
 
         for interface in interfaces:
             file_path = os.path.join(config.DOCUMENT_DIRECTORY, interface["file_name"])
-            # ワークブックを読み込みを開始
-            app.log_output(f"## {interface["file_name"]} の Book読み込みを開始 ##")
+            # ワークブックを読み込み
             workbook = openpyxl.load_workbook(file_path, data_only=True)
 
             # スケルトンのコピーを作成
@@ -55,9 +54,9 @@ def main(app):
 
             site_json["Title"] = interface["interface_name"]
 
-            ### 詳細_編集要素 の 読み込みを開始 ###
+            ### 詳細_編集要素 の 取り込み ###
             sht = workbook["詳細_編集要素"]
-            app.log_output(f"### 詳細_編集要素 の Sheet読み込みを開始 ###")
+            app.log_output(f"詳細_編集要素 の 取り込みを開始")
             # 型情報データを取得する
             type_cells = [cell for cell in sht[config.EDIT_ROW_INDEX_TYPE] if not util.is_empty(cell.value)]
             type_cells.append(sht[util.get_address(config.EDIT_ROW_INDEX_TYPE, sht.max_column + 1)])
@@ -127,10 +126,10 @@ def main(app):
 
             site_json["SiteSettings"]["EditorColumnHash"]["General"] = column_name_list
 
-            ### 一覧_画面レイアウト の 読み込みを開始 ###
+            ### 一覧_画面レイアウト の 取り込み ###
             for name in ["一覧_画面レイアウト", "詳細_画面レイアウト"]:
                 sht = workbook[name]
-                app.log_output(f"### {name} の Sheet読み込みを開始 ###")
+                app.log_output(f"{name} の 取り込みを開始")
                 # 型情報データを取得する
                 type_cells = [cell for cell in sht[config.LAYOUT_ROW_INDEX_TYPE] if not util.is_empty(cell.value)]
                 type_cells.append(sht[util.get_address(config.LAYOUT_ROW_INDEX_TYPE, sht.max_column + 1)])

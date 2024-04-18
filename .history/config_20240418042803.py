@@ -317,7 +317,7 @@ template_json = {
 	}
 }
 
-site_post_json = {
+site_skeleton_json = {
 	"TenantId": 1,
 	# "SiteId": 1,
 	"Title": "",
@@ -350,40 +350,4 @@ site_post_json = {
 	# "Publish": False,
 	# "DisableCrossSearch": False,
 	# "Comments": [],
-}
-
-
-site_skeleton_json = {
-	"TenantId": 1,
-	"SiteId": 1,
-	"Title": "",
-	"Body": '',
-	"GridGuide": '',
-	"EditorGuide": '',
-	"ReferenceType": 'Results',
-	"ParentId": 0,
-	"SiteSettings": {
-		"Version": 1.017,
-		"ReferenceType": 'Results',
-		"GridColumns": [],
-		"FilterColumns": [],
-		"EditorColumnHash": {
-			"General": [],
-		},
-		"TabLatestId": 0,
-		"Tabs": [],
-		"SectionLatestId": 0,
-		"Sections": [],
-		"LinkColumns": [],
-		"Columns": [],
-		"Links": [],
-		"Exports": [],
-		"Styles": [],
-		"Scripts": [],
-    "TitleSeparator": '',
-		"NoDisplayIfReadOnly": False,
-	},
-	"Publish": False,
-	"DisableCrossSearch": False,
-	"Comments": [],
 }

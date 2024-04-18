@@ -25,7 +25,7 @@ class Gui(tk.Tk):
         self.initialize_default_values()
 
     def create_widgets(self):
-        self.radioApi = tk.Radiobutton(self, text="POSTリクエスト", variable=self.radio_value, value="API", command=self.toggle_entries)
+        self.radioApi = tk.Radiobutton(self, text="JSONを用いてPOSTリクエスト", variable=self.radio_value, value="API", command=self.toggle_entries)
         self.radioApi.grid(row=0, column=0)
 
         self.radioJson = tk.Radiobutton(self, text="JSON出力", variable=self.radio_value, value="JSON", command=self.toggle_entries)

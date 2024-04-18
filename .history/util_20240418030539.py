@@ -43,18 +43,7 @@ def print_color(message, color):
         color = defaultColor
     print(f"{color}{message}{defaultColor}", file=sys.stderr)
 
-def is_numeric(value):
-    """
-    文字列が数値（整数または浮動小数点数）であるかどうかを判定する関数
 
-    :param value:           値
-    :return:                真偽値
-    """
-    try:
-        float(value)
-        return True
-    except ValueError:
-        return False
 
 def find_right_edge(sheet, cell_address, scan_direction = True):
     """
@@ -153,11 +142,3 @@ def pairwise(iterable):
     next(b, None)
     # パターン1: 最後の要素のペアは生成されない
     return zip(a, b)
-
-
-if __name__ == "__main__":
-    # テストケース
-    test_values = ["int", "float", "03", "2345", "-123.456", "0.56", "dsd", "100L", "5.2f"]
-    results = {val: is_numeric(val) for val in test_values}
-
-    print(results)

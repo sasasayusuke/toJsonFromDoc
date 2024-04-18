@@ -43,18 +43,7 @@ def print_color(message, color):
         color = defaultColor
     print(f"{color}{message}{defaultColor}", file=sys.stderr)
 
-def is_numeric(value):
-    """
-    文字列が数値（整数または浮動小数点数）であるかどうかを判定する関数
 
-    :param value:           値
-    :return:                真偽値
-    """
-    try:
-        float(value)
-        return True
-    except ValueError:
-        return False
 
 def find_right_edge(sheet, cell_address, scan_direction = True):
     """
@@ -79,7 +68,7 @@ def find_right_edge(sheet, cell_address, scan_direction = True):
         for col in range(sheet.max_column, start_column, -1):
             if not is_empty(sheet.cell(row=start_row, column=col).value):
                 return col
-    return sheet.max_column + 1
+    return sheet.max_column
 
 def find_down_edge(sheet, cell_address, scan_direction = True):
     """
@@ -104,7 +93,7 @@ def find_down_edge(sheet, cell_address, scan_direction = True):
         for row in range(sheet.max_row, start_row, -1):
             if not is_empty(sheet.cell(row=row, column=start_column).value):
                 return row
-    return sheet.max_row + 1
+    return sheet.max_row
 
 def get_address(row, col):
     return to_alphabet_from_num(col) + str(row)
@@ -153,11 +142,3 @@ def pairwise(iterable):
     next(b, None)
     # パターン1: 最後の要素のペアは生成されない
     return zip(a, b)
-
-
-if __name__ == "__main__":
-    # テストケース
-    test_values = ["int", "float", "03", "2345", "-123.456", "0.56", "dsd", "100L", "5.2f"]
-    results = {val: is_numeric(val) for val in test_values}
-
-    print(results)

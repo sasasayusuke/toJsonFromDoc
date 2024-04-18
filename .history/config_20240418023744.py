@@ -4,7 +4,7 @@ DEFAULT_SITE_ID = "2729117"
 
 DOCUMENT_DIRECTORY = "C:/Users/NT-210174/Desktop/work/詳細設計書"
 
-MARK_OK = "〇"
+MARK_OK = ""
 
 
 EDIT_ROW_INDEX_TYPE = 8
@@ -284,6 +284,7 @@ PARAMETERS = {
 }
 
 template_json = {
+
 	"HeaderInfo": {
         "BaseSiteId": 1,
         "CreatorName": "Y-Sasaki",
@@ -317,42 +318,6 @@ template_json = {
 	}
 }
 
-site_post_json = {
-	"TenantId": 1,
-	# "SiteId": 1,
-	"Title": "",
-	# "Body": '',
-	# "GridGuide": '',
-	# "EditorGuide": '',
-	"ReferenceType": 'Results',
-	# "ParentId": 0,
-	"SiteSettings": {
-		"Version": 1.017,
-		"ReferenceType": 'Results',
-		"GridColumns": [],
-		"FilterColumns": [],
-		"EditorColumnHash": {
-			"General": [],
-		},
-		# "TabLatestId": 0,
-		# "Tabs": [],
-		# "SectionLatestId": 0,
-		# "Sections": [],
-		"LinkColumns": [],
-		"Columns": [],
-		# "Links": [],
-		"Exports": [],
-		"Styles": [],
-		"Scripts": [],
-    # "TitleSeparator": '',
-	# 	"NoDisplayIfReadOnly": False,
-	},
-	# "Publish": False,
-	# "DisableCrossSearch": False,
-	# "Comments": [],
-}
-
-
 site_skeleton_json = {
 	"TenantId": 1,
 	"SiteId": 1,
@@ -362,6 +327,7 @@ site_skeleton_json = {
 	"EditorGuide": '',
 	"ReferenceType": 'Results',
 	"ParentId": 0,
+	"InheritPermission": 0,
 	"SiteSettings": {
 		"Version": 1.017,
 		"ReferenceType": 'Results',
