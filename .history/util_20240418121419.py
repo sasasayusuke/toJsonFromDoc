@@ -37,12 +37,10 @@ def print_color(message, color):
     """
     defaultColor = "\033[0m"
 
-    if color == "red":
+    if (color == "red"):
         color = "\033[31m"
-    elif color == "yellow":
+    elif(color == "yellow"):
         color = "\033[33m"
-    elif color == "gray":
-        color = "\033[90m"
     else:
         color = defaultColor
     print(f"{color}{message}{defaultColor}", file=sys.stderr)

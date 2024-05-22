@@ -37,12 +37,10 @@ def print_color(message, color):
     """
     defaultColor = "\033[0m"
 
-    if color == "red":
+    if (color == "red"):
         color = "\033[31m"
-    elif color == "yellow":
+    elif(color == "yellow"):
         color = "\033[33m"
-    elif color == "gray":
-        color = "\033[90m"
     else:
         color = defaultColor
     print(f"{color}{message}{defaultColor}", file=sys.stderr)
@@ -161,7 +159,7 @@ def pairwise(iterable):
 
 if __name__ == "__main__":
     # テストケース
-    test_values = [12, 0.444, "int", "float", "03", "2345", "-123.456", "0.56", "dsd", "100L", "5.2f"]
+    test_values = [12, "int", "float", "03", "2345", "-123.456", "0.56", "dsd", "100L", "5.2f"]
     results = {val: is_numeric(val) for val in test_values}
     print(results)
     for p in config.PARAMETERS:

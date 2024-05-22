@@ -92,7 +92,7 @@ class Gui(tk.Tk):
 
     def initialize_default_values(self):
         # デフォルト値はconfigモジュールに定義
-        self.entry_input_dir.insert(0, config.DEFAULT_INPUT_DIRECTORY)
+        self.entry_input_dir.insert(0, config.DEFAULT_INPUT_DIRECTOR)
         self.entry_output_dir.insert(0, config.DEFAULT_OUTPUT_DIRECTORY)
         self.entry_api_key.insert(0, config.DEFAULT_API_KEY)
         self.entry_server.insert(0, config.DEFAULT_SERVER)
@@ -110,8 +110,6 @@ class Gui(tk.Tk):
         elif msg_type == "warning":
             self.log_box.insert(tk.END, message + "\n", "warning")
             util.print_color(message, "yellow")
-        elif msg_type == "debug":
-            util.print_color(message, "gray")
         else:
             self.log_box.insert(tk.END, message + "\n")
             print(message)

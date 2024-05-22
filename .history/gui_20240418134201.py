@@ -25,6 +25,17 @@ class Gui(tk.Tk):
 
     def create_widgets(self):
         row_index = 0
+        self.label_input_dir = tk.Label(self, text="APIキー")
+        self.label_input_dir.grid(row=row_index, column=0)
+        self.entry_input_dir = tk.Entry(self, width=UI_LONG_INPUT_WIDTH)
+        self.entry_input_dir.grid(row=row_index, column=1)
+        row_index += 1
+
+        self.label_output_dir = tk.Label(self, text="APIキー")
+        self.label_output_dir.grid(row=row_index, column=0)
+        self.entry_output_dir = tk.Entry(self, width=UI_LONG_INPUT_WIDTH)
+        self.entry_output_dir.grid(row=row_index, column=1)
+        row_index += 1
 
         self.radioApi = tk.Radiobutton(self, text="POSTリクエスト", variable=self.radio_value, value="API", command=self.toggle_entries)
         self.radioApi.grid(row=row_index, column=0)
@@ -32,19 +43,6 @@ class Gui(tk.Tk):
         self.radioJson = tk.Radiobutton(self, text="JSON出力", variable=self.radio_value, value="JSON", command=self.toggle_entries)
         self.radioJson.grid(row=row_index, column=1)
         row_index += 1
-
-        self.label_input_dir = tk.Label(self, text="入力ディレクトリ")
-        self.label_input_dir.grid(row=row_index, column=0)
-        self.entry_input_dir = tk.Entry(self, width=UI_LONG_INPUT_WIDTH)
-        self.entry_input_dir.grid(row=row_index, column=1)
-        row_index += 1
-
-        self.label_output_dir = tk.Label(self, text="出力ディレクトリ")
-        self.label_output_dir.grid(row=row_index, column=0)
-        self.entry_output_dir = tk.Entry(self, width=UI_LONG_INPUT_WIDTH)
-        self.entry_output_dir.grid(row=row_index, column=1)
-        row_index += 1
-
 
         self.label_api_key = tk.Label(self, text="APIキー")
         self.label_api_key.grid(row=row_index, column=0)
@@ -75,12 +73,10 @@ class Gui(tk.Tk):
 
     def toggle_entries(self):
         if self.radio_value.get() == "API":
-            self.entry_output_dir.config(state=tk.DISABLED)
             self.entry_api_key.config(state=tk.NORMAL)
             self.entry_server.config(state=tk.NORMAL)
             self.entry_site.config(state=tk.NORMAL)
         else:
-            self.entry_output_dir.config(state=tk.NORMAL)
             self.entry_api_key.config(state=tk.DISABLED)
             self.entry_server.config(state=tk.DISABLED)
             self.entry_site.config(state=tk.DISABLED)
@@ -91,13 +87,11 @@ class Gui(tk.Tk):
             self.execute_callback(self)
 
     def initialize_default_values(self):
+        self.toggle_entries()
         # デフォルト値はconfigモジュールに定義
-        self.entry_input_dir.insert(0, config.DEFAULT_INPUT_DIRECTORY)
-        self.entry_output_dir.insert(0, config.DEFAULT_OUTPUT_DIRECTORY)
         self.entry_api_key.insert(0, config.DEFAULT_API_KEY)
         self.entry_server.insert(0, config.DEFAULT_SERVER)
         self.entry_site.insert(0, config.DEFAULT_SITE_ID)
-        self.toggle_entries()
 
     def configure_text_tags(self):
         self.log_box.tag_configure("error", foreground="red")
@@ -110,8 +104,6 @@ class Gui(tk.Tk):
         elif msg_type == "warning":
             self.log_box.insert(tk.END, message + "\n", "warning")
             util.print_color(message, "yellow")
-        elif msg_type == "debug":
-            util.print_color(message, "gray")
         else:
             self.log_box.insert(tk.END, message + "\n")
             print(message)

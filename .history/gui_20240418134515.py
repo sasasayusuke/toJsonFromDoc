@@ -75,12 +75,11 @@ class Gui(tk.Tk):
 
     def toggle_entries(self):
         if self.radio_value.get() == "API":
-            self.entry_output_dir.config(state=tk.DISABLED)
+            self.label_output_dir.config(state=tk.NORMAL)
             self.entry_api_key.config(state=tk.NORMAL)
             self.entry_server.config(state=tk.NORMAL)
             self.entry_site.config(state=tk.NORMAL)
         else:
-            self.entry_output_dir.config(state=tk.NORMAL)
             self.entry_api_key.config(state=tk.DISABLED)
             self.entry_server.config(state=tk.DISABLED)
             self.entry_site.config(state=tk.DISABLED)
@@ -91,13 +90,11 @@ class Gui(tk.Tk):
             self.execute_callback(self)
 
     def initialize_default_values(self):
+        self.toggle_entries()
         # デフォルト値はconfigモジュールに定義
-        self.entry_input_dir.insert(0, config.DEFAULT_INPUT_DIRECTORY)
-        self.entry_output_dir.insert(0, config.DEFAULT_OUTPUT_DIRECTORY)
         self.entry_api_key.insert(0, config.DEFAULT_API_KEY)
         self.entry_server.insert(0, config.DEFAULT_SERVER)
         self.entry_site.insert(0, config.DEFAULT_SITE_ID)
-        self.toggle_entries()
 
     def configure_text_tags(self):
         self.log_box.tag_configure("error", foreground="red")
@@ -110,8 +107,6 @@ class Gui(tk.Tk):
         elif msg_type == "warning":
             self.log_box.insert(tk.END, message + "\n", "warning")
             util.print_color(message, "yellow")
-        elif msg_type == "debug":
-            util.print_color(message, "gray")
         else:
             self.log_box.insert(tk.END, message + "\n")
             print(message)

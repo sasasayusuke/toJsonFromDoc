@@ -1,8 +1,8 @@
 DEFAULT_API_KEY = "95babed2e072f2640bbdd8f179a6bfe0cad718d8939a84d604a9f4ebfcb03ad1ca9da58b98573e0eb572e09d9893f1c9795277d4b1264ca4dfc53600dcb7cbd3"
 DEFAULT_SERVER = "https://ssj-pleasanterdev-sv.local.sdt-autolabo.com"
-DEFAULT_SITE_ID = "2727363"
-DEFAULT_INPUT_DIRECTORY = r"C:\Users\NT-210174\Desktop\work\詳細設計書"
-DEFAULT_OUTPUT_DIRECTORY = r"C:\Users\NT-210174\Desktop\work\サイトパッケージJson"
+DEFAULT_SITE_ID = "2729117"
+
+DOCUMENT_DIRECTORY = "C:/Users/NT-210174/Desktop/work/詳細設計書"
 
 MARK_OK = "〇"
 
@@ -16,7 +16,6 @@ LAYOUT_ROW_INDEX_GRID = 40
 
 # タブの定義
 TABS = {
-
     "一覧要素": {
         "key": 'GridColumns',
     },
@@ -31,12 +30,6 @@ TABS = {
     },
     "リンク要素": {
         "key": 'LinkColumns',
-    },
-    "スタイル要素": {
-        "key": 'Styles',
-    },
-    "スクリプト要素": {
-        "key": 'Scripts',
     },
     "その他要素": {
         "key": 'others',
@@ -330,94 +323,93 @@ PARAMETERS = {
         "type": "float",
         "scope": "all",
     },
-    "ID": {
-        "key": "Id",
-        "type": "float",
-        "scope": ["script", "style", "html"],
-    },
     "タイトル": {
-        "key": "Title",
-        "type": "string",
+        "key": "ImportKey",
+        "type": "bool",
         "scope": ["script", "style", "html"],
     },
     "挿入位置": {
-        "key": "PositionType",
-        "type": "array",
-        "values": {
-            "Head top" : 1000,
-            "Head bottom" : 1010,
-            "Body script top" : 9000,
-            "Body script bottom" : 9010,
-        },
+        "key": "ImportKey",
+        "type": "bool",
         "scope": ["script", "style", "html"],
     },
-    "内容": {
-        "key": "Body",
-        "type": "textarea",
+    "スタイル": {
+        "key": "ImportKey",
+        "type": "bool",
+        "scope": ["script", "style", "html"],
+    },
+    "スクリプト": {
+        "key": "ImportKey",
+        "type": "bool",
+        "scope": ["script", "style", "html"],
+    },
+    "HTML": {
+        "key": "ImportKey",
+        "type": "bool",
         "scope": ["script", "style", "html"],
     },
     "無効": {
-        "key": "Disabled",
+        "key": "ImportKey",
         "type": "bool",
         "scope": ["script", "style", "html"],
     },
     "全て": {
-        "key": "All",
+        "key": "ImportKey",
         "type": "bool",
         "scope": ["script", "style", "html"],
     },
     "新規作成": {
-        "key": "New",
+        "key": "ImportKey",
         "type": "bool",
         "scope": ["script", "style", "html"],
     },
     "編集": {
-        "key": "Edit",
+        "key": "ImportKey",
         "type": "bool",
         "scope": ["script", "style", "html"],
     },
     "一覧": {
-        "key": "Index",
+        "key": "ImportKey",
         "type": "bool",
         "scope": ["script", "style", "html"],
     },
     "カレンダー": {
-        "key": "Calendar",
+        "key": "ImportKey",
         "type": "bool",
         "scope": ["script", "style", "html"],
     },
     "クロス集計": {
-        "key": "Crosstab",
+        "key": "ImportKey",
         "type": "bool",
         "scope": ["script", "style", "html"],
     },
     "ガントチャート": {
-        "key": "Gantt",
+        "key": "ImportKey",
         "type": "bool",
         "scope": ["script", "style", "html"],
     },
     "バーンダウンチャート": {
-        "key": "BurnDown",
+        "key": "ImportKey",
         "type": "bool",
         "scope": ["script", "style", "html"],
     },
     "時系列チャート": {
-        "key": "TimeSeries",
+        "key": "ImportKey",
         "type": "bool",
         "scope": ["script", "style", "html"],
     },
     "分析チャート": {
-        "key": "Analy",
+        "key": "ImportKey",
         "type": "bool",
         "scope": ["script", "style", "html"],
     },
     "カンバン": {
-        "key": "Kamban",
+        "key": "ImportKey",
         "type": "bool",
         "scope": ["script", "style", "html"],
     },
     "画像ライブラリ": {
-        "key": "ImageLib",
+        "key": "ImportKey",
         "type": "bool",
         "scope": ["script", "style", "html"],
     },
