@@ -31,12 +31,14 @@ def main(app):
                         "file_name": file_name
                     })
 
-        app.log_output(f"## 読み取り件数: {len(interfaces)} ##")
+        app.log_output(f"# 読み取り件数: {len(interfaces)}")
+        for interface in interfaces:
+            app.log_output(f"## {interface['file_name']}")
 
         for interface in interfaces:
             file_path = os.path.join(input_dir, interface["file_name"])
             # ワークブックを読み込みを開始
-            app.log_output(f"## {interface['file_name']} の Book読み込みを開始 ##")
+            app.log_output(f"### {interface['file_name']} の Book読み込みを開始")
             workbook = openpyxl.load_workbook(file_path, data_only=True)
 
             # スケルトンのコピーを作成
@@ -56,12 +58,11 @@ def main(app):
                 site_json["ApiVersion"] = 1.1
                 site_json["ApiKey"] = api_key
 
-
             site_json["Title"] = interface["interface_name"]
 
             ### 詳細_編集要素 の 読み込みを開始 ###
             sht = workbook["詳細_編集要素"]
-            app.log_output(f"### 詳細_編集要素 の Sheet読み込みを開始 ###")
+            app.log_output(f"#### 詳細_編集要素 の Sheet読み込みを開始")
             # 型情報データを取得する
             type_cells = [cell for cell in sht[config.EDIT_ROW_INDEX_TYPE] if not util.is_empty(cell.value)]
             type_cells.append(sht[util.get_address(config.EDIT_ROW_INDEX_TYPE, sht.max_column + 1)])
@@ -82,7 +83,6 @@ def main(app):
                         app.log_output(f"row: {i} col: {j} 読み込みを開始", "debug")
                         item_cell = sht.cell(row=config.EDIT_ROW_INDEX_ITEM, column=j)
                         target_cell = sht.cell(row=i, column=j)
-                        item_name = None
 
                         # 値チェック
                         if util.is_empty(target_cell.value):
@@ -90,14 +90,6 @@ def main(app):
                         elif item_cell.value not in config.PARAMETERS:
                             app.log_output(f"{util.get_address(item_cell.row, item_cell.column)}: PARAMETERS に登録されていないのでスキップします。: {item_cell.value}", "warning")
                             continue
-                        elif item_cell.value == "項目名":
-                            if util.is_numeric(target_cell.value):
-                                item_name = config.TYPES[cur_cell.value]["key"] + util.to_N_digits(target_cell.value, 3)
-                            elif len(target_cell.value) == 1 and target_cell.value.isalpha():
-                                item_name = config.TYPES[cur_cell.value]["key"] + target_cell.value.upper()
-                            else:
-                                app.log_output(f"{util.get_address(target_cell.row, target_cell.column)}: 不正な値なのでこの行はスキップします。: {target_cell.value}", "warning")
-                                break
                         # 型チェック
                         if config.PARAMETERS[item_cell.value]["type"] == "float":
                             if util.is_numeric(target_cell.value):
@@ -118,36 +110,46 @@ def main(app):
                                 app.log_output(f"{util.get_address(target_cell.row, target_cell.column)}: {item_cell.value} の値が不正のためスキップします。: {target_cell.value}", "warning")
                                 continue
                         else:
-                            edit_obj[config.PARAMETERS[item_cell.value]["key"]] = target_cell.value
+                            item_value = target_cell.value
+                            if item_cell.value == "項目名":
+                                if util.is_numeric(target_cell.value):
+                                    item_value = config.TYPES[cur_cell.value]["key"] + util.to_N_digits(target_cell.value, 3)
+                                elif len(target_cell.value) == 1 and target_cell.value.isalpha():
+                                    item_value = config.TYPES[cur_cell.value]["key"] + target_cell.value.upper()
+                                else:
+                                    app.log_output(f"{util.get_address(target_cell.row, target_cell.column)}: 不正な値なのでこの行はスキップします。: {target_cell.value}", "warning")
+                                    break
+                                column_name_list.append(item_value)
+                            elif item_cell.value == "表示名":
+                                label_text_list.append(item_value)
+
+                            edit_obj[config.PARAMETERS[item_cell.value]["key"]] = item_value
 
                     if config.PARAMETERS["表示名"]["key"] in edit_obj:
                         # 必須チェック
                         try:
-                            app.log_output(f"{item_name} の項目名を取得しました。", "debug")
+                            app.log_output(f'{edit_obj[config.PARAMETERS["項目名"]["key"]]} の項目名を取得しました。', "debug")
                         except NameError:
                             app.log_output(f"{util.get_address(target_cell.row, target_cell.column)}: 項目名 が未入力なのでこの行はスキップします。", "warning")
                             continue
                         # 重複チェック
-                        if item_name in column_name_list:
-                            app.log_output(f"{util.get_address(target_cell.row, target_cell.column)}: 項目名 が重複しているのでこの行はスキップします。: {item_name}", "warning")
+                        if util.is_duplicates(column_name_list):
+                            name = column_name_list.pop()
+                            app.log_output(f"{util.get_address(target_cell.row, target_cell.column)}: 項目名 が重複しているのでこの行はスキップします。: {name}", "warning")
                             continue
-                        if edit_obj[config.PARAMETERS["表示名"]["key"]] in label_text_list:
-                            app.log_output(f'{util.get_address(target_cell.row, target_cell.column)}: 表示名 が重複しているのでこの行はスキップします。: {edit_obj[config.PARAMETERS["表示名"]["key"]]}', "warning")
+                        if util.is_duplicates(label_text_list):
+                            label = label_text_list.pop()
+                            app.log_output(f"{util.get_address(target_cell.row, target_cell.column)}: 表示名 が重複しているのでこの行はスキップします。: {label}", "warning")
                             continue
 
-                        edit_obj[config.PARAMETERS["項目名"]["key"]] = item_name
-                        column_name_list.append(item_name)
-                        label_text_list.append(edit_obj[config.PARAMETERS["表示名"]["key"]])
                         site_json["SiteSettings"]["Columns"].append(edit_obj)
 
             site_json["SiteSettings"]["EditorColumnHash"]["General"] = column_name_list
 
-
-
             ### 一覧_画面レイアウト の 読み込みを開始 ###
             for name in ["一覧_画面レイアウト", "詳細_画面レイアウト"]:
                 sht = workbook[name]
-                app.log_output(f"### {name} の Sheet読み込みを開始 ###")
+                app.log_output(f"#### {name} の Sheet読み込みを開始")
                 # 型情報データを取得する
                 type_cells = [cell for cell in sht[config.LAYOUT_ROW_INDEX_TYPE] if not util.is_empty(cell.value)]
                 type_cells.append(sht[util.get_address(config.LAYOUT_ROW_INDEX_TYPE, sht.max_column + 1)])
@@ -183,7 +185,7 @@ def main(app):
 
             ## スクリプト要素 の 読み込みを開始 ###
             sht = workbook["スクリプト要素"]
-            app.log_output(f"### スクリプト要素 の Sheet読み込みを開始 ###")
+            app.log_output(f"#### スクリプト要素 の Sheet読み込みを開始")
             # 型情報データを取得する
             type_cells = [cell for cell in sht[config.EDIT_ROW_INDEX_TYPE] if not util.is_empty(cell.value)]
             type_cells.append(sht[util.get_address(config.EDIT_ROW_INDEX_TYPE, sht.max_column + 1)])
@@ -196,7 +198,7 @@ def main(app):
                 end_col = next_cell.column - 1
 
                 for i in range(start_row, end_row):
-                    edit_obj = {}
+                    script_obj = {}
                     for j in range(start_col, end_col):
                         app.log_output(f"row: {i} col: {j} 読み込みを開始", "debug")
                         item_cell = sht.cell(row=config.EDIT_ROW_INDEX_ITEM, column=j)
@@ -211,28 +213,28 @@ def main(app):
                         # 型チェック
                         if config.PARAMETERS[item_cell.value]["type"] == "float":
                             if util.is_numeric(target_cell.value):
-                                edit_obj[config.PARAMETERS[item_cell.value]["key"]] = target_cell.value
+                                script_obj[config.PARAMETERS[item_cell.value]["key"]] = target_cell.value
                             else:
                                 app.log_output(f"{util.get_address(target_cell.row, target_cell.column)}: {item_cell.value} の型がfloatではないためスキップします。: {target_cell.value}", "warning")
                                 continue
                         elif config.PARAMETERS[item_cell.value]["type"] == "bool":
                             if target_cell.value == config.MARK_OK or target_cell.value == "":
-                                edit_obj[config.PARAMETERS[item_cell.value]["key"]] = target_cell.value == config.MARK_OK
+                                script_obj[config.PARAMETERS[item_cell.value]["key"]] = target_cell.value == config.MARK_OK
                             else:
                                 app.log_output(f"{util.get_address(target_cell.row, target_cell.column)}: {item_cell.value} の型がboolではないためスキップします。: {target_cell.value}", "warning")
                                 continue
                         elif config.PARAMETERS[item_cell.value]["type"] == "array":
                             if target_cell.value in config.PARAMETERS[item_cell.value]["values"]:
-                                edit_obj[config.PARAMETERS[item_cell.value]["key"]] = config.PARAMETERS[item_cell.value]["values"][target_cell.value]
+                                script_obj[config.PARAMETERS[item_cell.value]["key"]] = config.PARAMETERS[item_cell.value]["values"][target_cell.value]
                             else:
                                 app.log_output(f"{util.get_address(target_cell.row, target_cell.column)}: {item_cell.value} の値が不正のためスキップします。: {target_cell.value}", "warning")
                                 continue
                         else:
-                            edit_obj[config.PARAMETERS[item_cell.value]["key"]] = target_cell.value
+                            script_obj[config.PARAMETERS[item_cell.value]["key"]] = target_cell.value
 
 
-                    if config.PARAMETERS["タイトル"]["key"] in edit_obj:
-                        site_json["SiteSettings"][config.TABS[cur_cell.value]["key"]].append(edit_obj)
+                    if config.PARAMETERS["タイトル"]["key"] in script_obj:
+                        site_json["SiteSettings"][config.TABS[cur_cell.value]["key"]].append(script_obj)
 
 
 

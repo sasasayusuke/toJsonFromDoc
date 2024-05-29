@@ -112,6 +112,7 @@ class Gui(tk.Tk):
             util.print_color(message, "yellow")
         elif msg_type == "debug":
             util.print_color(message, "gray")
+            # return
         else:
             self.log_box.insert(tk.END, message + "\n")
             print(message)

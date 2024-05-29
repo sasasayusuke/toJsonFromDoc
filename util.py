@@ -6,10 +6,18 @@ import config
 import sys
 from itertools import tee
 
+def is_duplicates(list):
+    """
+    指定されたリストに重複があるかどうか
+
+    :param list: チェックするリスト
+    :return: 真偽値
+    """
+    return len(list) != len(set(list))
 
 def is_empty(obj):
     """
-        オブジェクトが空であるかどうか
+    オブジェクトが空であるかどうか
 
     :param obj:     オブジェクト
     :return:        真偽値
