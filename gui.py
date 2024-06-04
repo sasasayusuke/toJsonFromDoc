@@ -3,11 +3,11 @@ import config
 import util
 
 # 以下の設定値は実際の設定ファイルまたはここに直接定義されています
-UI_WIDTH = 600
-UI_HEIGHT = 400
-UI_LONG_INPUT_WIDTH = 50
+UI_WIDTH = 800
+UI_HEIGHT = 500
+UI_LONG_INPUT_WIDTH = 80
 UI_SHORT_INPUT_WIDTH = 20
-UI_LOG_WIDTH = 80
+UI_LOG_WIDTH = 100
 
 class Gui(tk.Tk):
     def __init__(self, title, execute_callback=None):

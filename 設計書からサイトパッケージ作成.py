@@ -6,7 +6,7 @@ import os
 import re
 import requests
 import copy
-
+import traceback
 
 def main(app):
 
@@ -129,7 +129,8 @@ def main(app):
                         # 必須チェック
                         try:
                             app.log_output(f'{edit_obj[config.PARAMETERS["項目名"]["key"]]} の項目名を取得しました。', "debug")
-                        except NameError:
+                        except (KeyError, NameError):
+                            name = label_text_list.pop()
                             app.log_output(f"{util.get_address(target_cell.row, target_cell.column)}: 項目名 が未入力なのでこの行はスキップします。", "warning")
                             continue
                         # 重複チェック
@@ -254,10 +255,11 @@ def main(app):
 
                 app.log_output(f'{server}/items/{response.json()["Id"]}/index にアクセスしてください')
 
+        app.log_output(f'全ての処理が正常終了しました。')
 
-
-    except Exception as e:
-        app.log_output(f"致命的なエラー: {e}", "error")
+    except Exception:
+        error_info = traceback.format_exc()
+        app.log_output(f"詳細なトレースバック情報:\n{error_info}", "error")
 
 if __name__ == "__main__":
     app = gui.Gui("設計書からサイトパッケージ作成",execute_callback=main)
